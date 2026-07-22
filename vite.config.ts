@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import VueRouter from 'unplugin-vue-router/vite'
+import VueDevTools from 'vite-plugin-vue-devtools'
 import { defineConfig, lazyPlugins } from 'vite-plus'
 
 const rekaComponentNames = [
@@ -112,6 +113,7 @@ export default defineConfig({
     ],
   },
   plugins: lazyPlugins(() => [
+    VueDevTools(),
     VueRouter({
       routesFolder: 'src/pages',
       dts: 'src/typed-router.d.ts',
