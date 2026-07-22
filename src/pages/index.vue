@@ -29,10 +29,10 @@ onMounted(loadExample)
 <template>
   <section class="hero stack-lg">
     <p class="eyebrow">Production-minded starter</p>
-    <h1>Vue SSR without framework lock-in.</h1>
+    <h1>Vue SSR with a Nitro server.</h1>
     <p class="hero-copy">
-      Vite+ handles the toolchain, Bun serves SSR and API routes, and Storybook keeps reusable
-      primitives honest.
+      Nitro owns HTTP and API concerns, Vue owns UI rendering, and Vite+ owns the toolchain. Bun
+      runs the unified production output.
     </p>
     <div class="cluster">
       <Button @click="dialogOpen = true">Open dialog</Button>
@@ -44,7 +44,7 @@ onMounted(loadExample)
 
   <section class="feature-grid" aria-label="Starter capabilities">
     <Card title="Server rendering" variant="accent">
-      A fresh router, Pinia store, and API client are created for every request.
+      Nitro delegates page requests to a fresh Vue router, Pinia store, and API client.
     </Card>
     <Card title="Typed fetch client">
       <template #default>

@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import vue from '@vitejs/plugin-vue'
+import { nitro } from 'nitro/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import VueRouter from 'unplugin-vue-router/vite'
@@ -112,40 +113,47 @@ export default defineConfig({
       },
     ],
   },
-  plugins: lazyPlugins(() => [
-    VueDevTools(),
-    VueRouter({
-      routesFolder: 'src/pages',
-      dts: 'src/typed-router.d.ts',
-      importMode: 'async',
-    }),
-    vue(),
-    Components({
-      dirs: ['src/components'],
-      dts: 'src/components.d.ts',
-      resolvers: [(name) => (rekaComponents.has(name) ? { name, from: 'reka-ui' } : undefined)],
-    }),
-    AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        'pinia',
-        {
-          vue: ['createSSRApp'],
-          'vue-router': ['createMemoryHistory', 'createRouter', 'createWebHistory', 'RouterLink'],
-          'reka-ui': [...rekaComponentNames],
-        },
-        {
-          from: 'reka-ui',
-          imports: ['PrimitiveProps'],
-          type: true,
-        },
-      ],
-      dirs: ['src/composables', 'src/stores'],
-      dts: 'src/auto-imports.d.ts',
-      vueTemplate: true,
-    }),
-  ]),
+  plugins: [
+    lazyPlugins(() => [
+      VueDevTools(),
+      VueRouter({
+        routesFolder: 'src/pages',
+        dts: 'src/typed-router.d.ts',
+        importMode: 'async',
+      }),
+      vue(),
+      Components({
+        dirs: ['src/components'],
+        dts: 'src/components.d.ts',
+        resolvers: [(name) => (rekaComponents.has(name) ? { name, from: 'reka-ui' } : undefined)],
+      }),
+      AutoImport({
+        imports: [
+          'vue',
+          'vue-router',
+          'pinia',
+          {
+            vue: ['createSSRApp'],
+            'vue-router': ['createMemoryHistory', 'createRouter', 'createWebHistory', 'RouterLink'],
+            'reka-ui': [...rekaComponentNames],
+          },
+          {
+            from: 'reka-ui',
+            imports: ['PrimitiveProps'],
+            type: true,
+          },
+        ],
+        dirs: ['src/composables', 'src/stores'],
+        dts: 'src/auto-imports.d.ts',
+        vueTemplate: true,
+      }),
+    ]),
+    nitro(),
+  ],
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

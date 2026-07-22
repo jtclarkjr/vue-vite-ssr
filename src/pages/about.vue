@@ -3,8 +3,8 @@
     <p class="eyebrow">Architecture</p>
     <h1>Small pieces, explicit boundaries.</h1>
     <p>
-      The starter keeps the server, application factory, API transport, pages, stores, and UI
-      primitives independently replaceable.
+      Nitro owns HTTP and API concerns, Vue owns UI rendering and application state, and Vite+ owns
+      development, checks, tests, and builds.
     </p>
     <Button :as="RouterLink" to="/" variant="secondary">Back home</Button>
   </section>
