@@ -13,6 +13,8 @@ export class ApiError extends Error {
     message: string,
     readonly status: number,
     readonly data: unknown,
+    readonly code?: string,
+    readonly requestId?: string,
   ) {
     super(message)
     this.name = 'ApiError'
@@ -38,6 +40,12 @@ const isBodyInit = (value: unknown): value is BodyInit =>
   value instanceof URLSearchParams ||
   value instanceof ArrayBuffer ||
   ArrayBuffer.isView(value)
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const getString = (value: unknown, key: string) =>
+  isRecord(value) && typeof value[key] === 'string' ? value[key] : undefined
 
 export function createApiClient(options: ApiClientOptions = {}): ApiClient {
   const fetchImplementation = options.fetch ?? globalThis.fetch
@@ -67,11 +75,18 @@ export function createApiClient(options: ApiClientOptions = {}): ApiClient {
           : await response.text()
 
     if (!response.ok) {
+      const nestedError = isRecord(data) ? data.error : undefined
       const message =
-        typeof data === 'object' && data !== null && 'message' in data
-          ? String(data.message)
-          : `Request failed with status ${response.status}`
-      throw new ApiError(message, response.status, data)
+        getString(data, 'message') ??
+        getString(nestedError, 'message') ??
+        `Request failed with status ${response.status}`
+      const code = getString(nestedError, 'code') ?? getString(data, 'code')
+      const requestId =
+        getString(nestedError, 'requestId') ??
+        getString(data, 'requestId') ??
+        response.headers.get('x-request-id') ??
+        undefined
+      throw new ApiError(message, response.status, data, code, requestId)
     }
 
     // The caller supplies the response contract; runtime schema validation can be added per domain.

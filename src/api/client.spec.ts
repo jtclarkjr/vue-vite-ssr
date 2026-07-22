@@ -29,6 +29,31 @@ describe('createApiClient', () => {
     )
   })
 
+  it('parses structured server errors and exposes their correlation fields', async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      Response.json(
+        {
+          error: {
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Internal server error',
+            requestId: 'request-123',
+          },
+        },
+        { status: 500, headers: { 'x-request-id': 'request-123' } },
+      ),
+    )
+    const client = createApiClient({ baseUrl: 'https://example.test', fetch: fetchMock })
+
+    await expect(client.get('/api/value')).rejects.toEqual(
+      expect.objectContaining({
+        status: 500,
+        message: 'Internal server error',
+        code: 'INTERNAL_SERVER_ERROR',
+        requestId: 'request-123',
+      }),
+    )
+  })
+
   it('forwards abort signals', async () => {
     const controller = new AbortController()
     controller.abort()

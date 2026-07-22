@@ -33,6 +33,7 @@ export default defineConfig({
       'components.d.ts',
       'typed-router.d.ts',
       'storybook-static',
+      'graphify-out',
     ],
   },
   lint: {
@@ -49,6 +50,7 @@ export default defineConfig({
       '**/dist/**',
       '**/coverage/**',
       '**/storybook-static/**',
+      '**/graphify-out/**',
       '**/auto-imports.d.ts',
       '**/components.d.ts',
       '**/typed-router.d.ts',

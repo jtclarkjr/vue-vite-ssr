@@ -2,6 +2,7 @@ import { extname, resolve, sep } from 'node:path'
 
 import { handleApiRequest } from './api'
 import { renderDocument } from './document'
+import { createUnhandledRequestResponse } from './observability'
 
 interface RenderModule {
   render: (
@@ -47,23 +48,24 @@ Bun.serve({
   hostname: '0.0.0.0',
   port,
   async fetch(request) {
-    const apiResponse = await handleApiRequest(request)
-    if (apiResponse) return apiResponse
-
-    const url = new URL(request.url)
-    const assetPath = resolveAsset(url.pathname)
-    if (assetPath) {
-      const file = Bun.file(assetPath)
-      if (!(await file.exists())) return new Response('Not found', { status: 404 })
-      return new Response(file, {
-        headers: {
-          'cache-control': 'public, max-age=31536000, immutable',
-          'content-type': contentTypes[extname(assetPath)] ?? 'application/octet-stream',
-        },
-      })
-    }
-
+    const startedAt = performance.now()
     try {
+      const apiResponse = await handleApiRequest(request)
+      if (apiResponse) return apiResponse
+
+      const url = new URL(request.url)
+      const assetPath = resolveAsset(url.pathname)
+      if (assetPath) {
+        const file = Bun.file(assetPath)
+        if (!(await file.exists())) return new Response('Not found', { status: 404 })
+        return new Response(file, {
+          headers: {
+            'cache-control': 'public, max-age=31536000, immutable',
+            'content-type': contentTypes[extname(assetPath)] ?? 'application/octet-stream',
+          },
+        })
+      }
+
       const routeUrl = `${url.pathname}${url.search}`
       const result = await render(routeUrl, { origin: url.origin })
       return new Response(renderDocument(template, result.html, result.state), {
@@ -74,8 +76,7 @@ Bun.serve({
         },
       })
     } catch (error) {
-      console.error(error)
-      return new Response('Internal server error', { status: 500 })
+      return createUnhandledRequestResponse(request, error, { startedAt })
     }
   },
 })

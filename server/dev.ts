@@ -5,6 +5,7 @@ import { createServer as createViteServer, type ViteDevServer } from 'vite-plus'
 import { handleApiRequest } from './api'
 import { renderDocument } from './document'
 import { toWebRequest, writeWebResponse } from './http'
+import { createUnhandledRequestResponse, normalizeError } from './observability'
 
 interface RenderModule {
   render: (
@@ -20,6 +21,7 @@ interface RenderModule {
 const port = Number(process.env.PORT ?? 5173)
 
 const server = createHttpServer((request, response) => {
+  const startedAt = performance.now()
   void (async () => {
     const webRequest = await toWebRequest(request)
     const apiResponse = await handleApiRequest(webRequest)
@@ -42,19 +44,27 @@ const server = createHttpServer((request, response) => {
           response.setHeader('cache-control', 'no-store')
           response.end(renderDocument(template, result.html, result.state))
         } catch (error) {
-          const normalizedError = error instanceof Error ? error : new Error(String(error))
+          const normalizedError = normalizeError(error)
           vite.ssrFixStacktrace(normalizedError)
-          console.error(normalizedError)
-          response.statusCode = 500
-          response.setHeader('content-type', 'text/plain; charset=utf-8')
-          response.end(normalizedError.stack)
+          await writeWebResponse(
+            createUnhandledRequestResponse(webRequest, normalizedError, {
+              exposeError: true,
+              startedAt,
+            }),
+            response,
+          )
         }
       })()
     })
-  })().catch((error: unknown) => {
-    console.error(error)
-    response.statusCode = 500
-    response.end('Internal server error')
+  })().catch(async (error: unknown) => {
+    const url = new URL(request.url ?? '/', 'http://localhost')
+    await writeWebResponse(
+      createUnhandledRequestResponse({ method: request.method ?? 'GET', url: url.href }, error, {
+        exposeError: true,
+        startedAt,
+      }),
+      response,
+    )
   })
 })
 

@@ -1,12 +1,13 @@
+import { createApiRequestHandler } from './observability'
+
 const json = (data: unknown, init: ResponseInit = {}) => {
   const headers = new Headers(init.headers)
   headers.set('cache-control', 'no-store')
   return Response.json(data, { ...init, headers })
 }
 
-export async function handleApiRequest(request: Request): Promise<Response | null> {
+const routeApiRequest = async (request: Request): Promise<Response> => {
   const url = new URL(request.url)
-  if (!url.pathname.startsWith('/api/')) return null
 
   if (request.method === 'GET' && url.pathname === '/api/health') {
     return json({ status: 'ok', service: 'vue-vite-ssr' })
@@ -21,3 +22,5 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
   return json({ message: 'API route not found' }, { status: 404 })
 }
+
+export const handleApiRequest = createApiRequestHandler(routeApiRequest)
