@@ -1,0 +1,10 @@
+.git
+.vite-hooks
+.vscode
+coverage
+dist
+node_modules
+storybook-static
+*.log
+.env
+.env.*
