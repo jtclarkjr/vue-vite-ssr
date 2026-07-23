@@ -9,6 +9,12 @@ A reusable Vue 3 boilerplate with Vite+, Bun SSR, typed file routing, Pinia hydr
   development, checks, tests, and builds.
 - [Bun](https://bun.sh) is the package manager and JavaScript runtime used by the SSR server.
 
+## Nitro branch
+
+The [`nitro` branch](https://github.com/jtclarkjr/vue-vite-ssr/tree/nitro) uses Nitro for the server
+and includes usage of
+[`@jtclarkjr/component-library-vue`](https://github.com/jtclarkjr/component-library-vue).
+
 ## Start here
 
 ```sh
