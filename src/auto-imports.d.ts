@@ -102,9 +102,6 @@ declare global {
   // @ts-ignore
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
-  // @ts-ignore
-  export type { PrimitiveProps } from 'reka-ui'
-  import('reka-ui')
 }
 
 // for vue template auto import
@@ -112,16 +109,7 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
-    readonly DialogClose: UnwrapRef<typeof import('reka-ui')['DialogClose']>
-    readonly DialogContent: UnwrapRef<typeof import('reka-ui')['DialogContent']>
-    readonly DialogDescription: UnwrapRef<typeof import('reka-ui')['DialogDescription']>
-    readonly DialogOverlay: UnwrapRef<typeof import('reka-ui')['DialogOverlay']>
-    readonly DialogPortal: UnwrapRef<typeof import('reka-ui')['DialogPortal']>
-    readonly DialogRoot: UnwrapRef<typeof import('reka-ui')['DialogRoot']>
-    readonly DialogTitle: UnwrapRef<typeof import('reka-ui')['DialogTitle']>
-    readonly DialogTrigger: UnwrapRef<typeof import('reka-ui')['DialogTrigger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly Primitive: UnwrapRef<typeof import('reka-ui')['Primitive']>
     readonly RouterLink: UnwrapRef<typeof import('vue-router')['RouterLink']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>

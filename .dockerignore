@@ -5,7 +5,6 @@ coverage
 dist
 .output
 node_modules
-storybook-static
 *.log
 .env
 .env.*

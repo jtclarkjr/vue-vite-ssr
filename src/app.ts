@@ -1,5 +1,8 @@
 import type { StateTree } from 'pinia'
 
+import '@jtclarkjr/component-library-vue/style.css'
+import './assets/styles/main.scss'
+
 import App from './App.vue'
 import { apiClientKey, createApiClient, type ApiClient } from './api/client'
 import { createAppRouter } from './router'

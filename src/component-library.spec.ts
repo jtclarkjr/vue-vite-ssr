@@ -1,17 +1,19 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vite-plus/test'
 
-import Button from '../Button.vue'
-import Input from '../Input.vue'
-import Spinner from '../Spinner.vue'
+import { Button, Card, Dialog, Input, Spinner } from '@jtclarkjr/component-library-vue'
 
-describe('UI primitives', () => {
+describe('component library integration', () => {
+  it('exposes the starter component set', () => {
+    expect([Button, Card, Dialog, Input, Spinner]).not.toContain(undefined)
+  })
+
   it('renders button variants and loading semantics', () => {
     const wrapper = mount(Button, {
       props: { loading: true, variant: 'secondary' },
       slots: { default: 'Save' },
     })
-    expect(wrapper.classes()).toContain('ui-button--secondary')
+    expect(wrapper.classes()).toContain('clv-button--secondary')
     expect(wrapper.attributes('aria-busy')).toBe('true')
     expect(wrapper.attributes()).toHaveProperty('disabled')
   })

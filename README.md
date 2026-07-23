@@ -1,7 +1,7 @@
 # Vue Vite+ SSR
 
 A reusable Vue 3 full-stack starter with Nitro, Vite+, Bun, typed file routing, Pinia hydration, a
-typed `fetch` client, auto-imports, automatic components, Storybook, OXC checks, and Docker.
+typed `fetch` client, auto-imports, automatic components, OXC checks, and Docker.
 
 The boundary is explicit: Nitro owns HTTP and API concerns, Vue owns UI rendering and application
 state, and Vite+ owns development, checks, tests, and builds. Bun remains the package manager and
@@ -24,9 +24,6 @@ vp test                   # unit tests
 vp check                  # format, lint, and type-check
 vp run build:ssr          # unified Nitro production build
 vp run preview:ssr        # build and start the production Bun server
-vp run storybook          # component workbench on port 6006
-vp run build-storybook    # static Storybook build
-vp run test:storybook     # browser-based story tests
 ```
 
 Production runs the Bun preset artifact directly:
@@ -46,8 +43,9 @@ bun run .output/server/index.mjs
 - `src/entry-client.ts` restores serialized Pinia state before hydration.
 - `src/api/client.ts` remains the browser-facing typed request boundary, with JSON handling,
   cancellation, and `ApiError`.
-- `src/components/ui` contains themeable primitives. Props model variants and state; slots model
-  composition. Storybook is their public catalogue.
+- `@jtclarkjr/component-library-vue` supplies the themeable UI primitives and their public
+  Storybook catalogue; the app resolves the starter component set through
+  `unplugin-vue-components`.
 - `src/pages` becomes typed routes through `unplugin-vue-router`; Vue, Router, Pinia, composables,
   stores, and components are auto-imported with generated declarations.
 
@@ -65,9 +63,10 @@ route or adapter while leaving the injected `useApi()` application boundary inta
 
 ## UI conventions
 
-Design tokens live in `src/assets/styles/_tokens.scss`. Reka UI supplies accessible behavior for
-composite widgets such as dialogs, while the project owns all visual styling. The starter includes
-Button, Dialog, Input, Card, and Spinner primitives with stories and tests.
+Design tokens live in `src/assets/styles/_tokens.scss` and map onto the component library's public
+`--clv-*` custom properties. The starter auto-imports Button, Dialog, Input, Card, and Spinner from
+[`@jtclarkjr/component-library-vue`](https://github.com/jtclarkjr/component-library-vue), which owns
+their accessible behavior, visual styling, stories, and component-level tests.
 
 ## Docker
 

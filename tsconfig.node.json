@@ -5,7 +5,6 @@
     "vite.config.*",
     "nitro.config.*",
     "vitest.config.*",
-    "vitest.storybook.config.*",
     "server/**/*.ts",
     "cypress.config.*",
     "playwright.config.*",

@@ -11,21 +11,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Button: typeof import('./components/ui/Button.vue')['default']
-    Card: typeof import('./components/ui/Card.vue')['default']
-    Dialog: typeof import('./components/ui/Dialog.vue')['default']
-    DialogClose: typeof import('reka-ui')['DialogClose']
-    DialogContent: typeof import('reka-ui')['DialogContent']
-    DialogDescription: typeof import('reka-ui')['DialogDescription']
-    DialogOverlay: typeof import('reka-ui')['DialogOverlay']
-    DialogPortal: typeof import('reka-ui')['DialogPortal']
-    DialogRoot: typeof import('reka-ui')['DialogRoot']
-    DialogTitle: typeof import('reka-ui')['DialogTitle']
-    DialogTrigger: typeof import('reka-ui')['DialogTrigger']
-    Input: typeof import('./components/ui/Input.vue')['default']
-    Primitive: typeof import('reka-ui')['Primitive']
+    Button: typeof import('@jtclarkjr/component-library-vue')['Button']
+    Card: typeof import('@jtclarkjr/component-library-vue')['Card']
+    Dialog: typeof import('@jtclarkjr/component-library-vue')['Dialog']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Spinner: typeof import('./components/ui/Spinner.vue')['default']
+    Spinner: typeof import('@jtclarkjr/component-library-vue')['Spinner']
   }
 }

@@ -8,18 +8,8 @@ import VueRouter from 'unplugin-vue-router/vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
 import { defineConfig, lazyPlugins } from 'vite-plus'
 
-const rekaComponentNames = [
-  'DialogClose',
-  'DialogContent',
-  'DialogDescription',
-  'DialogOverlay',
-  'DialogPortal',
-  'DialogRoot',
-  'DialogTitle',
-  'DialogTrigger',
-  'Primitive',
-] as const
-const rekaComponents = new Set<string>(rekaComponentNames)
+const componentLibraryNames = ['Button', 'Card', 'Dialog', 'Input', 'Spinner'] as const
+const componentLibraryComponents = new Set<string>(componentLibraryNames)
 
 export default defineConfig({
   staged: {
@@ -30,13 +20,7 @@ export default defineConfig({
     singleQuote: true,
     printWidth: 100,
     trailingComma: 'all',
-    ignorePatterns: [
-      'auto-imports.d.ts',
-      'components.d.ts',
-      'typed-router.d.ts',
-      'storybook-static',
-      'graphify-out',
-    ],
+    ignorePatterns: ['auto-imports.d.ts', 'components.d.ts', 'typed-router.d.ts', 'graphify-out'],
   },
   lint: {
     plugins: ['eslint', 'typescript', 'unicorn', 'oxc', 'vue', 'vitest'],
@@ -51,7 +35,6 @@ export default defineConfig({
     ignorePatterns: [
       '**/dist/**',
       '**/coverage/**',
-      '**/storybook-static/**',
       '**/graphify-out/**',
       '**/auto-imports.d.ts',
       '**/components.d.ts',
@@ -69,12 +52,6 @@ export default defineConfig({
       'vite-plus/prefer-vite-plus-imports': 'error',
     },
     overrides: [
-      {
-        files: ['.storybook/**/*.ts'],
-        rules: {
-          'vite-plus/prefer-vite-plus-imports': 'off',
-        },
-      },
       {
         files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts', '**/*.vue'],
         rules: {
@@ -125,7 +102,12 @@ export default defineConfig({
       Components({
         dirs: ['src/components'],
         dts: 'src/components.d.ts',
-        resolvers: [(name) => (rekaComponents.has(name) ? { name, from: 'reka-ui' } : undefined)],
+        resolvers: [
+          (name) =>
+            componentLibraryComponents.has(name)
+              ? { name, from: '@jtclarkjr/component-library-vue' }
+              : undefined,
+        ],
       }),
       AutoImport({
         imports: [
@@ -135,12 +117,6 @@ export default defineConfig({
           {
             vue: ['createSSRApp'],
             'vue-router': ['createMemoryHistory', 'createRouter', 'createWebHistory', 'RouterLink'],
-            'reka-ui': [...rekaComponentNames],
-          },
-          {
-            from: 'reka-ui',
-            imports: ['PrimitiveProps'],
-            type: true,
           },
         ],
         dirs: ['src/composables', 'src/stores'],
@@ -158,8 +134,9 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+    dedupe: ['vue'],
   },
   ssr: {
-    noExternal: ['reka-ui'],
+    noExternal: ['@jtclarkjr/component-library-vue', 'reka-ui'],
   },
 })

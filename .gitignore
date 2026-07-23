@@ -13,7 +13,6 @@ dist
 dist-ssr
 .output
 coverage
-storybook-static
 *.local
 
 # Editor directories and files
