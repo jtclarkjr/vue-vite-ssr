@@ -73,18 +73,3 @@ onMounted(loadExample)
     </template>
   </Dialog>
 </template>
-
-<style scoped lang="scss">
-.cluster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: var(--space-4);
-  margin-top: clamp(4rem, 9vw, 7rem);
-}
-</style>
