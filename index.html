@@ -8,7 +8,12 @@
   </head>
   <body>
     <script server>
-      $RESPONSE.status = (await fetchViteEnv('ssr', $REQUEST)).status
+      const ssrResponse =
+        typeof fetchViteEnv === 'function'
+          ? await fetchViteEnv('ssr', $REQUEST)
+          : await globalThis.__nitro_vite_envs__?.ssr?.fetch($REQUEST)
+
+      if (ssrResponse) $RESPONSE.status = ssrResponse.status
     </script>
     <!--ssr-outlet-->
     <script type="module" src="/src/entry-client.ts"></script>
