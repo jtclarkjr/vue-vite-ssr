@@ -20,32 +20,32 @@
   },
   "dependencies": {
     "@jtclarkjr/component-library-vue": "^0.4.2",
-    "devalue": "^5.9.1",
+    "devalue": "^5.9.4",
     "pinia": "^4.0.3",
-    "sass": "^1.103.1",
+    "sass": "^1.105.1",
     "unplugin-auto-import": "^21.1.0",
     "unplugin-vue-components": "^32.1.0",
     "unplugin-vue-router": "^0.19.2",
-    "vue": "^3.5.41",
-    "vue-router": "^5.2.0"
+    "vue": "^3.5.43",
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.5",
-    "@types/bun": "^1.4.0",
+    "@types/bun": "^1.4.2",
     "@types/jsdom": "^28.0.3",
-    "@types/node": "^24.13.3",
-    "@vitejs/plugin-vue": "^6.0.8",
-    "@vue/test-utils": "^2.4.11",
+    "@types/node": "^24.19.2",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.9.1",
     "jiti": "^2.7.0",
     "jsdom": "^29.1.1",
     "nitro": "3.0.260610-beta",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vite-plus": "^0.3.0"
+    "vite-plus": "^1.1.0"
   },
   "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0"
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0"
   },
   "devEngines": {
     "packageManager": {
