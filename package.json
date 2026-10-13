@@ -28,13 +28,13 @@
   "dependencies": {
     "devalue": "^5.9.4",
     "pinia": "^4.0.3",
-    "reka-ui": "^2.10.5",
+    "reka-ui": "^2.11.0",
     "sass": "^1.105.1",
     "unplugin-auto-import": "^21.1.0",
     "unplugin-vue-components": "^32.1.0",
     "unplugin-vue-router": "^0.19.2",
     "vue": "^3.5.43",
-    "vue-router": "^5.3.1"
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^10.6.1",
@@ -43,23 +43,23 @@
     "@tsconfig/node24": "^24.0.5",
     "@types/bun": "^1.4.2",
     "@types/jsdom": "^28.0.3",
-    "@types/node": "^24.19.1",
+    "@types/node": "^24.19.2",
     "@vitejs/plugin-vue": "^6.0.9",
     "@vitest/browser-playwright": "^4.1.11",
     "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.9.1",
     "jiti": "^2.7.0",
     "jsdom": "^29.1.1",
-    "playwright": "^1.63.0",
+    "playwright": "^1.64.0",
     "storybook": "^10.6.1",
     "typescript": "~6.0.3",
-    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vite-plus": "1.0.0",
+    "vite-plus": "1.1.0",
     "vue-tsc": "^3.3.12"
   },
   "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0"
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0"
   },
   "devEngines": {
     "packageManager": {
