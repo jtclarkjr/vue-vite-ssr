@@ -20,7 +20,7 @@
     text-decoration: none;
 
     &:hover,
-    &.router-link-active {
+    &[aria-current='page'] {
       color: var(--color-text);
     }
   }

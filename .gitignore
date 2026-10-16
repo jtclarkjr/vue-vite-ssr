@@ -38,9 +38,15 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
-
-
 # dotenv environment variable files
 .env
 .env.*
-!.env.example
+.dev.vars
+.dev.vars.*
+.void
+.wrangler
+.void-wrangler.jsonc
+
+# Private Cloudflare configuration and resource state
+/void.config.ts
+/void.lock.json

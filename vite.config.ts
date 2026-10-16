@@ -1,15 +1,16 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import vue from '@vitejs/plugin-vue'
-import { nitro } from 'nitro/vite'
+import { voidVue } from '@void/vue/plugin'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import VueRouter from 'unplugin-vue-router/vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
 import { defineConfig, lazyPlugins } from 'vite-plus'
+import { voidPlugin } from 'void'
 
 const componentLibraryNames = ['Button', 'Card', 'Dialog', 'Input', 'Spinner'] as const
 const componentLibraryComponents = new Set<string>(componentLibraryNames)
+const isTest = Boolean(process.env.VITEST)
 
 export default defineConfig({
   staged: {
@@ -20,7 +21,16 @@ export default defineConfig({
     singleQuote: true,
     printWidth: 100,
     trailingComma: 'all',
-    ignorePatterns: ['auto-imports.d.ts', 'components.d.ts', 'typed-router.d.ts', 'graphify-out'],
+    ignorePatterns: [
+      'AGENTS.md',
+      'auto-imports.d.ts',
+      'components.d.ts',
+      'graphify-out',
+      '**/.void/**',
+      '**/.wrangler/**',
+      '.void-wrangler.jsonc',
+      'db/migrations/meta/**',
+    ],
   },
   lint: {
     plugins: ['eslint', 'typescript', 'unicorn', 'oxc', 'vue', 'vitest'],
@@ -38,7 +48,10 @@ export default defineConfig({
       '**/graphify-out/**',
       '**/auto-imports.d.ts',
       '**/components.d.ts',
-      '**/typed-router.d.ts',
+      '**/.void/**',
+      '**/.wrangler/**',
+      '.void-wrangler.jsonc',
+      'db/migrations/meta/**',
     ],
     rules: {
       'no-array-constructor': 'error',
@@ -91,14 +104,10 @@ export default defineConfig({
     ],
   },
   plugins: [
+    isTest ? [] : voidPlugin(),
     lazyPlugins(() => [
-      VueDevTools(),
-      VueRouter({
-        routesFolder: 'src/pages',
-        dts: 'src/typed-router.d.ts',
-        importMode: 'async',
-      }),
-      vue(),
+      isTest ? [] : VueDevTools(),
+      isTest ? vue() : voidVue(),
       Components({
         dirs: ['src/components'],
         dts: 'src/components.d.ts',
@@ -110,21 +119,12 @@ export default defineConfig({
         ],
       }),
       AutoImport({
-        imports: [
-          'vue',
-          'vue-router',
-          'pinia',
-          {
-            vue: ['createSSRApp'],
-            'vue-router': ['createMemoryHistory', 'createRouter', 'createWebHistory', 'RouterLink'],
-          },
-        ],
-        dirs: ['src/composables', 'src/stores'],
+        imports: ['vue'],
+        dirs: ['src/composables'],
         dts: 'src/auto-imports.d.ts',
         vueTemplate: true,
       }),
     ]),
-    nitro(),
   ],
   server: {
     host: '0.0.0.0',

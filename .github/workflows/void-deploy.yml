@@ -1,0 +1,51 @@
+name: Deploy to Cloudflare
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: void-cloudflare-deploy-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.22.0'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.3.14'
+      - run: bun install --frozen-lockfile
+      - name: Restore private Void configuration
+        env:
+          VOID_CONFIG_TS: ${{ secrets.VOID_CONFIG_TS }}
+          VOID_LOCK_JSON: ${{ secrets.VOID_LOCK_JSON }}
+        run: |
+          if [ -z "$VOID_CONFIG_TS" ] || [ -z "$VOID_LOCK_JSON" ]; then
+            echo "::error::Add VOID_CONFIG_TS and VOID_LOCK_JSON repository secrets before deploying."
+            exit 1
+          fi
+          umask 077
+          printf '%s\n' "$VOID_CONFIG_TS" > void.config.ts
+          printf '%s\n' "$VOID_LOCK_JSON" > void.lock.json
+      - run: bun run prepare
+      - run: bun run check
+      - run: bun run test
+      - name: Deploy
+        env:
+          # Add this scoped token at Settings → Secrets and variables → Actions.
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # Required in fresh checkouts when a Worker Version has no preview URL.
+          CLOUDFLARE_WORKERS_SUBDOMAIN: ${{ vars.CLOUDFLARE_WORKERS_SUBDOMAIN }}
+          # Required only when Cloudflare Access protects Worker readiness.
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: bunx void deploy --platform cloudflare

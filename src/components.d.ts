@@ -14,8 +14,5 @@ declare module 'vue' {
     Button: typeof import('@jtclarkjr/component-library-vue')['Button']
     Card: typeof import('@jtclarkjr/component-library-vue')['Card']
     Dialog: typeof import('@jtclarkjr/component-library-vue')['Dialog']
-    RouterLink: typeof import('vue-router')['RouterLink']
-    RouterView: typeof import('vue-router')['RouterView']
-    Spinner: typeof import('@jtclarkjr/component-library-vue')['Spinner']
   }
 }
