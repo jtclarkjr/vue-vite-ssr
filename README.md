@@ -15,6 +15,39 @@ The [`nitro` branch](https://github.com/jtclarkjr/vue-vite-ssr/tree/nitro) uses 
 and includes usage of
 [`@jtclarkjr/component-library-vue`](https://github.com/jtclarkjr/component-library-vue).
 
+## Void branch
+
+The [`void` branch](https://github.com/jtclarkjr/vue-vite-ssr/tree/void) uses Void Pages for Vue SSR
+and hydration, typed API routes, and a D1 SQLite database on Cloudflare Workers. It also uses
+[`@jtclarkjr/component-library-vue`](https://github.com/jtclarkjr/component-library-vue).
+
+Use Node.js 24.21 or newer and Bun 1.3.14. From a clone of this repository:
+
+```sh
+git switch void
+vp install
+cp void.config.example.ts void.config.ts
+vp run prepare
+vp dev
+```
+
+Local development runs at `http://localhost:5173` with a local Workers runtime and D1 database;
+Cloudflare credentials are not required locally. Before deploying, set your Worker name in the
+local config and supply your Cloudflare account ID:
+
+```sh
+CLOUDFLARE_ACCOUNT_ID=your-account-id vp exec void deploy --platform cloudflare
+```
+
+Keep the real `void.config.ts` and generated `void.lock.json` private; both are ignored by Git.
+Restore the existing app's real lock when deploying from another machine to preserve resource
+IDs and deployment history.
+
+For GitHub Actions deployment, configure the repository secrets `VOID_CONFIG_TS`, `VOID_LOCK_JSON`,
+and `CLOUDFLARE_API_TOKEN`, plus `CLOUDFLARE_ACCOUNT_ID` when using the example config. See the
+[Void branch deployment instructions](https://github.com/jtclarkjr/vue-vite-ssr/tree/void#deploy-to-cloudflare)
+for secret contents and optional Cloudflare settings.
+
 ## Start here
 
 ```sh
